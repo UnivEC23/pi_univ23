@@ -1,5 +1,5 @@
-# pi_s2_2025
-
-#### Projeto do 2 Semestre de 2025
-Desenvolver um software com framework web que utilize banco de dados, inclua script web (JavaScript),
-nuvem, uso de API, acessibilidade, controle de versão e testes. Opcionalmente incluir análises de dados.
+#### Projeto do 1 Semestre de 2026
+Desenvolver um software com framework web ou aplicativo que utilize banco
+de dados, inclua script web (Javascript), nuvem, acessibilidade, controle de versão,
+integração contínua e testes. Incluir um dos: uso e fornecimento de API, análises de
+dados e IoT.
