@@ -1,0 +1,59 @@
+repo: https://github.com/UnivEC23/pi_s2_2025
+todo->sql alchemy, criar e org objetos arrumar front, render_template?
+#caso adicione algo novo
+pip freeze > requirements.txt
+
+
+#tem que ter docker e python instalados
+
+#extensões recomendadas
+gitless
+docker
+autopepe8
+python
+pylance
+pydebugger
+vscode-icons
+
+#para login
+usuário: user
+senha: pass
+
+
+##como rodar
+
+1.criar .venv local
+ctrl+shit+p   - accessar os comandos do vscode
+procurar python, criar ambiente(environment) e seguir
+veja se você tem acesso ao .venv no terminal*
+
+2.(caso necessário)
+#instalar deps(somente após setup do venv local)
+executar pelo terminal do vscode, que estara funcionando pelo venv(local)
+pip install -r requirements.txt
+
+3.(caso necessário)
+#executar o mariadb(ou não, se rodando em modo dev)
+docker compose up 
+ctrl+c para parar, ou fechar janela do terminal
+ou docker compose up -d para rodar no fundo
+com docker compose down para parar
+
+- caso queria executar localmente via sqlite:
+>no arquivo init.py, coloque # antes da linha:
+db_atual = db_mariadb -> # db_atual = db_mariadb
+>e retire o # antes de:
+#db_atual = db_sql_lite -> db_atual = db_sql_lite
+E pronto, agora vc esta no modo dev.
+
+
+4.executar projeto python
+isso deve ser executado no env certo, dentro do terminal do vscode.*
+python appjs.py
+
+*caso seu terminal não apareça (.venv) antes da linha, reinicie o terminal clicando no simbolo de lixinho no canto superior direto e reabrindo o terminal
+
+
+
+###setup depuração
+só verificar o launch.json

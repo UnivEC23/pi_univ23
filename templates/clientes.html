@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Clientes</title>
+    <script src="/static/clientes.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bulma-list.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .list-item {
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item-controls {
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+
+<body class="has-background-dark">
+    <section class="section">
+        <div class="container">
+            <h1 class="title is-light">Gerenciar Clientes</h1>
+            <h2 class="subtitle is-light">Adicione e remova clientes da sua lista.</h2>
+
+            <div class="box is-hidden" id="listaCBox">
+                <h2 class="title is-3 ">Lista de Clientes</h2>
+                <ul class="list" id="listaClientes">
+
+                </ul>
+
+            </div>
+
+            <div class="box is-hidden" id="listaCoBox">
+                <h2 class="title is-3 ">Lista de Comentários</h2>
+                <ul class="list" id="listaComents">
+
+                </ul>
+
+            </div>
+
+            <div class="container">
+                <div>
+                    <button id="botaoClientes" type="button" onclick="abrirClientes()" class="button is-info">
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>Adicionar Novo Cliente</span>
+                    </button>
+                </div>
+
+                <div id="box_clientes" class="box is-hidden">
+                    <h2 class="title">Novo Cliente</h2>
+
+                    <form method="POST" id="formSolicit" onsubmit="semPost(event)">
+                        <div class="field">
+                            <label class="label has-text-dark">Nome</label>
+                            <div class="control">
+                                <input id="nome" class="input is-info" type="text" name="nome" placeholder="Seu nome"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label has-text-dark">Email</label>
+                            <div class="control">
+                                <input id="email" class="input is-info" type="emai" name="email" placeholder="Seu email"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label has-text-dark">Solicitação</label>
+                            <div class="control">
+                                <textarea id="solicit" class="textarea is-info" type="text" name="solicit"
+                                    placeholder="Descreve seu problema" required></textarea>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button onclick="adiClientes()" class="button is-primary is-info">
+                                    <span>Adicionar</span>
+                                </button>
+                            </div>
+                            <div class="control">
+                                <button class=" button is-light" type="button"
+                                    onclick="fecharClientes()">fechar</button>
+                            </div>
+                            <div class="is-flex is-justify-content-center is-align-items-center">
+                                <p class="has-text-centered has-text-danger is-hidden" id="erroSoli"> Por favor,
+                                    preencha todos os campos. </p>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <div class="field is-grouped"> -->
+                    <!-- <div class="control is-expanded">
+                    <input class="input is-info" type="text" id="novo-cliente" placeholder="Nome do cliente">
+                     </div>
+                     <br>
+                    <div class="control is-expanded">
+                    <input id="email" class="input is-info" type="email" name="email" placeholder="Seu email">
+                    </div>
+                    <div class="control">
+                    <button onclick="adiClientes()" class="button is-info">
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>Adicionar</span>
+                    </button>
+                 </div> -->
+                    <!-- </div> -->
+                </div>
+
+                <br>
+
+                <div>
+                    <button id="botaoComent" type="button" onclick="abrirComent()" class="button is-info">
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>Adicionar Novo Comentário</span>
+                    </button>
+                </div>
+
+                <div id="box_coment" class="box is-hidden">
+                    <h2 class="title">Novo Comentário</h2>
+                    <form method="POST" id="formComentario" onsubmit="semPost(event)">
+                        <div class="field">
+                            <label class="label has-text-grey-light">Seu Nome</label>
+                            <div class="control">
+                                <input class="input is-dark has-text-white-ter" type="text" id="nomeComentario"
+                                    placeholder="Seu nome" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label has-text-grey-light">Comentário</label>
+                            <div class="control">
+                                <textarea class="textarea is-dark has-text-white-ter" id="textoComentario"
+                                    placeholder="Seu comentário" required></textarea>
+                            </div>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-success" onclick="adiCmt()">Adicionar</button>
+                            </div>
+                            <div class="control">
+                                <button class="button is-light" type="button" onclick="fecharComent()">fechar</button>
+                            </div>
+                            <div class="is-flex is-justify-content-center is-align-items-center">
+                                <p class="has-text-centered has-text-danger is-hidden" id="erroCom"> Por favor,
+                                    preencha todos os campos. </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <br>
+
+
+            <div>
+                <!-- <a href="{{ url_for('home') }}" class="button is-light mt-4"> -->
+                <button class="button is-light mt-4" type="button" onclick="sairLogin()">
+                    <span class="icon">
+                        <i class="fas fa-arrow-left"></i>
+                    </span>
+                    <span>Voltar para a Página Inicial</span>
+                </button>
+                <!-- </a> -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function semPost(e) {
+            e.preventDefault();
+            return false;
+        }
+    </script>
+</body>
+
+</html>
