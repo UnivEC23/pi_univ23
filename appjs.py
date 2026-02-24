@@ -334,5 +334,5 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # crias as tabelas
 
-    # Base_Tur.metadata.create_all(engine)
+    Base_Tur.metadata.create_all(engine)
     rodar()

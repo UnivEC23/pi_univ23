@@ -2,10 +2,18 @@ from flask import Flask, render_template, request, jsonify, Response
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
+
 import libsql
 
 import os
 import sys
+
+# do manual
+# import libsql_client
+# client = libsql_client.create_client_sync(
+#     url="http://127.0.0.1:8080"
+# )
+
 
 load_dotenv()  # necessário para usar .env
 
@@ -34,15 +42,20 @@ app.config["SQLALCHEMY_DATABASE_URI"] = db_atual
 # global db
 db = SQLAlchemy(app)
 
-engine = create_engine(
-    "sqlite+libsql:///embedded.db",
-    # f"sqlite+{TURSO_DATABASE_URL}?secure=true",
-    connect_args={
-        "auth_token": TURSO_AUTH_TOKEN,
-        "sync_url": TURSO_DATABASE_URL,
-        # "sync_interval": 60,
-    },
-)
+# usa Turso na web
+# engine = create_engine(
+#     "sqlite+libsql:///embedded.db",
+#     # f"sqlite+{TURSO_DATABASE_URL}?secure=true",
+#     connect_args={
+#         "auth_token": TURSO_AUTH_TOKEN,
+#         "sync_url": TURSO_DATABASE_URL,
+#         # "sync_interval": 60,
+#     },
+# )
+
+# usa Turso local
+engine = create_engine("sqlite+libsql:///embedded.db")
+
 
 # # Create a libSQL client for sync operations
 # client = libsql.connect(
