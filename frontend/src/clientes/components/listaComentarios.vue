@@ -6,9 +6,10 @@ import box_comentario from "./box_coment.vue"
 import form_cliente from "../../components/form_cliente.vue"
 import { useToast } from "@/composables/useToast"
 import API_URL from "@/api/api_url"
+import form_comentario from "./form_comentario.vue"
 
 
-
+let abrir = ref<boolean>(false)
 
 const removerComent = async (_nome: string) => {
 	console.log("remover " + _nome)
@@ -27,7 +28,7 @@ const removerComent = async (_nome: string) => {
 	axios.delete(`/api/comentarios`, {
 		headers: {
 			'Content-Type': 'application/json',
-		}, data: JSON.stringify({ nome: _nome })
+		}, data: JSON.stringify({ autor: _nome })
 	}).then(response => {
 		pegarComentarios();
 		console.log(response.data);
@@ -38,6 +39,7 @@ const removerComent = async (_nome: string) => {
 
 }
 provide('remover', removerComent)
+provide('pegar', pegarComentarios)
 
 // let hover = ref(false)
 const { error } = useToast()
@@ -105,5 +107,14 @@ const comentariosFixos = [
 		</p> -->
 	</div>
 
+	<form_comentario v-model:abrir="abrir" v-if="abrir" />
 
+	<div v-if="!abrir">
+		<button id="botaoComent" type="button" @click="abrir = true" class="button is-white">
+			<span class="icon">
+				<i class="fas fa-plus"></i>
+			</span>
+			<span>Adicionar Novo Comentário</span>
+		</button>
+	</div>
 </template>
