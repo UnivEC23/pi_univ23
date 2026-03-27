@@ -39,7 +39,7 @@ const comentariosFixos = [
 </script>
 
 <template>
-	<div class="box has-background-grey-darker">
+	<div class="box bg">
 		<h2 class="title is-3 has-text-info">Comentários Recentes</h2>
 
 		<!-- Render fixed comments -->
@@ -57,3 +57,9 @@ const comentariosFixos = [
 		</p> -->
 	</div>
 </template>
+
+<style scoped>
+.bg {
+	background-color: #406380;
+}
+</style>

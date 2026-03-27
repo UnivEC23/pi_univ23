@@ -1,3 +1,8 @@
+.bg-leve {
+	background-color: rgb(238, 241, 241);
+	/*#f0ffff*/
+}
+
 /* override primary color */
 .button.is-primary {
 	background-color: #8c67ef;

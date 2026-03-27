@@ -13,10 +13,11 @@ import listaComentarios from '../components/listaComentarios.vue';
 			<div class="hero-body">
 				<div class="container">
 					<listaClientes />
+					<br>
 					<listaComentarios />
 
 					<!-- botão adicionar clientes e comentários -->
-					<!-- <botVoltar /> -->
+					<!-- <botVoltar /> foi para a navbar-->
 				</div>
 			</div>
 		</section>

@@ -12,7 +12,7 @@ import login from "./botLogin.vue"
 <template>
     <main>
         <section>
-            <b-navbar class="is-dark">
+            <b-navbar class="nav-bg is-light">
                 <template #brand>
                     <b-navbar-item tag="router-link" :to="{ path: '/' }">
                         <img src="/favicon-32x32.png" alt="EDS Marketing" />
@@ -41,8 +41,8 @@ import login from "./botLogin.vue"
     </main>
 </template>
 
-<!-- <style>
-RouterLink{
-
+<style scoped>
+.nav-bg {
+    background-color: rgb(116, 182, 218);
 }
-</style> -->
+</style>
