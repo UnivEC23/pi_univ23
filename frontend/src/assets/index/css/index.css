@@ -1,0 +1,29 @@
+:root {
+	--bg: #f4f4f1;
+	--surface: #ffffff;
+	--surface-muted: #f8f8f5;
+	--ink: #16212b;
+	--muted: #68737d;
+	--line: #d9ddd9;
+	--brand: #0d4f57;
+	--brand-dark: #07363c;
+	--brand-soft: #dfecea;
+	--accent: #eed9c4;
+	--shadow: 0 22px 50px rgba(16, 30, 38, 0.08);
+	--radius-lg: 28px;
+	--radius-md: 20px;
+	--radius-sm: 14px;
+	--container: 1180px;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--bg);
+}
+
+.section {
+	padding: 3.5rem 1.5rem;
+}

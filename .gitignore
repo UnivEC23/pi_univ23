@@ -6,6 +6,10 @@
 # 'git config --local include.path ../.gitconfig'  , talvez o / tenha que ser \ dependendo de onde é rodado o comando
 .gitconfig
 
+#turso
+embedded.db-shm
+embedded.db-wal
+
 frontend_p
 
 # Byte-compiled / optimized / DLL files

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useAuth } from "../composables/useAuth";
 import { useToast } from "@/composables/useToast"
 
+
 const isModalActive = ref(false);
 
 const user = ref("");
@@ -111,4 +112,8 @@ function submit() {
 .move-right {
 	margin-left: auto;
 }
+
+/* .modal-card-body {
+	background-color: azure;
+} */
 </style>

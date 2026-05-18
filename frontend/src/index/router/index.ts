@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // import HomeView from '../views/HomeView.vue'
-import index from '../views/index.vue'
+import index from '../views/index2.vue'
+import index2 from '../views/index.vue'
 import sobre from '../views/sobre.vue'
 import termos from '../views/termos.vue'
 
@@ -11,6 +12,11 @@ const router = createRouter({
       path: '/',
       name: 'início',
       component: index,
+    },
+    {
+      path: '/index2',
+      name: 'index antigo',
+      component: index2,
     },
     {
       path: '/sobre',

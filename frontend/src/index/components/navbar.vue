@@ -22,7 +22,9 @@ import login from "./botLogin.vue"
                     <b-navbar-item tag="router-link" :to="{ path: '/' }">Início </b-navbar-item>
                     <!-- <RouterLink tag="b-navbar-item" to="/">Início</RouterLink> -->
                     <!-- <b-navbar-item href="#"> Documentation </b-navbar-item> -->
-                    <b-navbar-item tag="router-link" :to="{ path: '/sobre' }">Sobre</b-navbar-item>
+                    <!-- <b-navbar-item tag="router-link" :to="{ path: '/sobre' }">Sobre</b-navbar-item> -->
+                    <b-navbar-item href="/#sobre">Sobre</b-navbar-item>
+                    <b-navbar-item href="/#contato">contato</b-navbar-item>
                     <b-navbar-dropdown label="Info" class="is-dark" hoverable>
                         <b-navbar-item tag="router-link" :to="{ path: '/termos' }">Termos & Política de Privacidade
                         </b-navbar-item>
