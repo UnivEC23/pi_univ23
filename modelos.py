@@ -5,7 +5,63 @@ from sqlalchemy import DateTime, String
 from dataclasses import dataclass
 from init import db, engine
 from datetime import datetime  # Importe o módulo datetime
+from enum import IntEnum, Enum
 
+
+class setor(Enum):
+    vazio = 0
+    comercio = 1
+    servicos = 2
+    industria = 3
+    outros = 4
+
+
+class idade(Enum):
+    vazio= 0
+    _0 = 1 #0+
+    _20 = 2 #20+
+    #30 = 3 #30+
+    _40 = 3 #40+
+    _60 = 4 #60+
+
+#class regiao(Enum):
+
+
+class estados(Enum):
+    vazio = 0
+    Acre = 1
+    Alagoas = 2
+    Amapá = 3
+    Amazonas = 4
+    Bahia = 5
+    Ceará = 6
+    Espírito_Santo = 7
+    Goiás = 8
+    Maranhão = 9
+    Mato_Grosso = 10
+    Mato_Grosso_do_Sul = 11
+    Minas_Gerais = 12
+    Pará = 13
+    Paraíba = 14
+    Paraná = 15
+    Pernambuco = 16
+    Piauí = 17
+    Rio_de_Janeiro = 18
+    Rio_Grande_do_Norte = 19
+    Rio_Grande_do_Sul = 20
+    Rondônia = 21
+    Roraima = 22
+    Santa_Catarina = 23
+    São_Paulo = 24
+    Sergipe = 25
+    Tocantins = 26
+    Distrito_Federal= 27
+
+class genero(Enum):
+    vazio = 0
+    masculino = 1
+    feminino = 2
+    outro = 3
 
 @dataclass
 class Clientes(db.Model):
@@ -13,6 +69,10 @@ class Clientes(db.Model):
     nome: str
     email: str
     solicit: str
+    estados: int
+    idade:int
+    setor:int
+    genero:int
 
     id = db.Column(db.Integer, unique=True,
                    primary_key=True, autoincrement=True)
@@ -23,8 +83,19 @@ class Clientes(db.Model):
     solicit = db.Column(db.String(500), unique=False,
                         nullable=True, primary_key=False)
 
+    #informa dados
+    estados = db.Column(db.Integer, unique=False,
+                            nullable=True, primary_key=False)
+    idade = db.Column(db.Integer, unique=False,
+                                nullable=True, primary_key=False)
+    setor = db.Column(db.Integer, unique=False,
+                                nullable=True, primary_key=False)
+    genero = db.Column(db.Integer, unique=False,
+                                nullable=True, primary_key=False)
+    
+
     def __repr__(self):
-        return "<Nome: {}>".format(self.nome)
+        return "<Nome: {}>".format(self.nome)+ " <email: {}>".format(self.email)+ " <estados: {}>".format(estados(self.estados).name)+ " <idade: {}>".format(idade(self.idade).name)+ " <setor: {}>".format(setor(self.setor).name)+ " <genero: {}>".format(genero(self.genero).name)
 
 
 @dataclass

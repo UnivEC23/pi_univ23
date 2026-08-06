@@ -4,7 +4,7 @@ from flask import jsonify
 from abc import ABC, abstractmethod
 import json
 import mariadb
-from modelos import Clientes
+from modelos import Clientes, estados, idade, setor, genero
 from init import app, db
 
 
@@ -121,7 +121,7 @@ class clientes_sql(iClientes):
             print(e)
             return {}, 500
 
-    def adicionar(self, nome: str, email: str, solicit: str):
+    def adicionar(self, nome: str, email: str, solicit: str, estado: estados, idade: idade, setor: setor, genero: genero):
         # connection for MariaDB
         conn = mariadb.connect(**mdbCFG)
         # create a connection cursor
@@ -156,6 +156,9 @@ class clientes_sqla(iClientes):
     def pegarTodos(self):
         try:
             clientes = Clientes.query.all()
+            print("\npegar todos")
+            print(clientes)
+            print("josnify" , jsonify(clientes).get_data(as_text=True))
 
             return jsonify(clientes), 200
         except Exception as e:
@@ -183,13 +186,13 @@ class clientes_sqla(iClientes):
             print(e)
             return {}, 500
 
-    def adicionar(self, nome: str, email: str, solicit: str):
+    def adicionar(self, nome: str, email: str, solicit: str, estados: estados, idade: idade, setor: setor, genero: genero):
+        print("adicionar: ", nome, email, solicit, estados, idade, setor, genero)
         try:
-            cliente = Clientes(nome=nome, email=email, solicit=solicit)
+            cliente = Clientes(nome=nome, email=email, solicit=solicit, estados=int(estados), idade=int(idade),setor=int(setor),genero=int(genero))
             db.session.add(cliente)
             db.session.commit()
-            return {}, 201
+            return jsonify({'msg': 'Orçamento adicionado com sucesso!'}), 201
         except Exception as e:
-            print("erro ao delete")
-            print(e)
+            print('Erro ao adicionar orçamento: ' + e)
             return {}, 500

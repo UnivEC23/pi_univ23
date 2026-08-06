@@ -120,10 +120,14 @@ def clientesPost():
     nome = request.json["nome"]
     email = request.json["email"]
     solicit = request.json["solicit"]
+    estados = request.json["estados"]
+    idade = request.json["idade"]
+    setor = request.json["setor"]
+    genero = request.json["genero"]
 
-    # print(nome, email, solicit)
+    print("\n\napi/clientes", nome, email, solicit, estados, idade, setor, genero)
 
-    return tClientes.adicionar(nome, email, solicit)
+    return tClientes.adicionar(nome, email, solicit, estados, idade, setor, genero)
 
 
 @app.route('/api/clientes', methods=['DELETE'])
@@ -141,9 +145,11 @@ def pegar_comentarios_tur():
             operação = select(Comentario_Turso)
             comentários = session. scalars(select(Comentario_Turso)).all()
 
-            print("Os comentários são:")
+            print("\n\nOs comentários são:")
             for item in session.scalars(operação):
                 print(item)
+            # print("\n\n")
+
             return comentários
             # return session.scalars(operação)
         except Exception as e:
@@ -297,8 +303,14 @@ def adicionar_orçamento():
         nome = data.get('nome')
         email = data.get('email')
         solicit = data.get('solicit')
+        estados = request.json["estados"]
+        idade = request.json["idade"]
+        setor = request.json["setor"]
+        genero = request.json["genero"]
 
-        tClientes.adicionar(nome, email, solicit)
+        #print(nome, email, solicit)
+
+        tClientes.adicionar(nome, email, solicit, estados, idade, setor, genero)
 
         return jsonify({'msg': 'Orçamento adicionado com sucesso!'}), 201
     except Exception as e:

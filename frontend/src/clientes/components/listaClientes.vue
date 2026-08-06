@@ -7,6 +7,8 @@ import axios from "axios"
 import { OTable, OTableColumn } from "@oruga-ui/oruga-next";
 import box_comentario from "./box_coment.vue"
 import type { Cliente } from "../types"
+import { estados, setor, genero, idade } from "@/clientes/types"
+import { estados_str, setor_str, genero_str, idade_str } from "@/clientes/types"
 import { useToast } from "@/composables/useToast"
 import form_cliente from "@/components/form_cliente.vue";
 
@@ -54,7 +56,12 @@ async function pegarClientes() {
 	try {
 		const response = await axios.get(`/api/clientes`)
 		clientes.value = response.data
-		// console.log("pegando: ", clientes.value)
+
+		console.log("pegando: ", {...response.data})
+		// clientes.value.forEach(cliente => {
+		// 	console.log(JSON.stringify(cliente))
+		// });
+
 		fetchCliSuccess.value = true  // mark success
 	} catch (erro: any) {
 		console.error("Erro ao buscar clientes:", erro)
@@ -87,25 +94,41 @@ const clientesExemplo = [
 		"email": "teste@roseira",
 		"id": 2,
 		"nome": "Teste",
-		"solicit": "a"
+		"solicit": "a",
+		"estados":estados.Acre,
+		"setor":setor.comercio,
+		"genero":genero.masculino,
+		"idade":idade._0
 	},
 	{
 		"email": "comenta@foi.com",
 		"id": 3,
 		"nome": "abriu",
-		"solicit": "aqui tive algo"
+		"solicit": "aqui tive algo",
+		"estados":estados.São_Paulo,
+		"setor":setor.industria,
+		"genero":genero.feminino,
+		"idade":idade._20
 	},
 	{
 		"email": "novo@oi",
 		"id": 4,
 		"nome": "haml",
-		"solicit": "projeto para ..."
+		"solicit": "projeto para ...",
+		"estados":estados.Amapá,
+		"setor":setor.servicos,
+		"genero":genero.outro,
+		"idade":idade._40
 	},
 	{
 		"email": "zezi@email.com",
 		"id": 5,
 		"nome": "tio z\u00e9",
-		"solicit": "Queria saber mais"
+		"solicit": "Queria saber mais",
+		"estados":estados.Goiás,
+		"setor":setor.outros,
+		"genero":genero.vazio,
+		"idade":idade._60
 	}
 ]
 
@@ -139,6 +162,7 @@ async function removerCliente(_nome: string) {
 </script>
 
 <template v-if="fetchCliSuccess && clientesValidos.length > 0">
+<!-- <template > -->
 	<div class="box has-background-grey-darker" @mouseenter="hover = true" @mouseleave="hover = false">
 		<h2 class="title is-3 has-text-info">Lista de Clientes</h2>
 		<!-- <o-table class="table has-background-grey-darker" :data="clientesExemplo">
@@ -149,7 +173,59 @@ async function removerCliente(_nome: string) {
 		</o-table> -->
 
 		<o-table class="table has-background-grey-darker" :data="clientesValidos">
+		<!-- <o-table class="table has-background-grey-darker" :data="clientesExemplo"> -->
 			<o-table-column field="nome" label="Nome" width="170" sortable />
+
+			<o-table-column field="setor" sortable>
+				<template #header>
+					<div class="has-text-centered">Setor</div>
+				</template>
+
+				<template #default="{ row }">
+					<div class="has-text-centered">
+						{{ setor_str(row.setor) }}
+					</div>
+				</template>
+			</o-table-column>
+
+
+			<o-table-column field="estados" sortable>
+				<template #header>
+					<div class="has-text-centered">Estado</div>
+				</template>
+
+				<template #default="{ row }">
+					<div class="has-text-centered">
+						{{ estados_str(row.estados) }}
+					</div>
+				</template>
+			</o-table-column>
+			
+			
+			<o-table-column field="idade" width="80" sortable>
+				<template #header>
+					<div class="has-text-centered">Idade</div>
+				</template>
+
+				<template #default="{ row }">
+					<div class="has-text-centered">
+						{{ idade_str(row.idade) }}
+					</div>
+				</template>
+			</o-table-column>
+			
+
+			<o-table-column field="genero" sortable>
+				<template #header>
+					<div class="has-text-centered">Gênero</div>
+				</template>
+
+				<template #default="{ row }">
+					<div class="has-text-centered">
+						{{ genero_str(row.genero) }}
+					</div>
+				</template>
+			</o-table-column>
 
 			<!-- <o-table-column field="email" label="Email" width="200" sortable header-class="has-text-centered" /> -->
 			<o-table-column field="email" label="Email" width="200" sortable header-class="has-text-centered"
@@ -174,7 +250,7 @@ async function removerCliente(_nome: string) {
 					</div>
 				</template>
 			</o-table-column>
-			<o-table-column field="nome" width="80">
+			<o-table-column width="80">
 				<template #header>
 					<div class="has-text-centered"></div>
 				</template>
