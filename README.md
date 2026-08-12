@@ -1,5 +1,6 @@
-#### Projeto do 1 Semestre de 2026
-Desenvolver um software com framework web ou aplicativo que utilize banco
-de dados, inclua script web (Javascript), nuvem, acessibilidade, controle de versão,
-integração contínua e testes. Incluir um dos: uso e fornecimento de API, análises de
-dados e IoT.
+#### Projeto PI
+Para rodar lance 
+python appjs.py
+e na pasta frontend
+npm run dev
+acesse pelo link do frontend

@@ -1,7 +1,18 @@
-repo: https://github.com/UnivEC23/pi_s2_2025
+repo: https://github.com/UnivEC23/pi_univ23
 todo->sql alchemy, criar e org objetos arrumar front, render_template?
 #caso adicione algo novo
 pip freeze > requirements.txt
+
+
+#instruções para manuziar a DB por código:
+#ver dados na db
+python clientes_db.py ver
+#adicionar a lista de clientes
+#é necessário deletar antes para evitar repetições
+python clientes_db.py adi
+#deletar lista
+python clientes_db.py del
+
 
 
 #tem que ter docker e python instalados

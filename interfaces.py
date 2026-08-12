@@ -4,7 +4,7 @@ from flask import jsonify
 from abc import ABC, abstractmethod
 import json
 import mariadb
-from modelos import Clientes, estados, idade, setor, genero
+from modelos import Clientes, Estados, Idade, Setor, Genero
 from init import app, db
 
 
@@ -121,7 +121,7 @@ class clientes_sql(iClientes):
             print(e)
             return {}, 500
 
-    def adicionar(self, nome: str, email: str, solicit: str, estado: estados, idade: idade, setor: setor, genero: genero):
+    def adicionar(self, nome: str, email: str, solicit: str, estado: Estados, idade: Idade, setor: Setor, genero: Genero):
         # connection for MariaDB
         conn = mariadb.connect(**mdbCFG)
         # create a connection cursor
@@ -186,7 +186,7 @@ class clientes_sqla(iClientes):
             print(e)
             return {}, 500
 
-    def adicionar(self, nome: str, email: str, solicit: str, estados: estados, idade: idade, setor: setor, genero: genero):
+    def adicionar(self, nome: str, email: str, solicit: str, estados: Estados, idade: Idade, setor: Setor, genero: Genero):
         print("adicionar: ", nome, email, solicit, estados, idade, setor, genero)
         try:
             cliente = Clientes(nome=nome, email=email, solicit=solicit, estados=int(estados), idade=int(idade),setor=int(setor),genero=int(genero))

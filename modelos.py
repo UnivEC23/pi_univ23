@@ -8,7 +8,7 @@ from datetime import datetime  # Importe o módulo datetime
 from enum import IntEnum, Enum
 
 
-class setor(Enum):
+class Setor(Enum):
     vazio = 0
     comercio = 1
     servicos = 2
@@ -16,7 +16,7 @@ class setor(Enum):
     outros = 4
 
 
-class idade(Enum):
+class Idade(Enum):
     vazio= 0
     _0 = 1 #0+
     _20 = 2 #20+
@@ -27,7 +27,7 @@ class idade(Enum):
 #class regiao(Enum):
 
 
-class estados(Enum):
+class Estados(Enum):
     vazio = 0
     Acre = 1
     Alagoas = 2
@@ -57,7 +57,7 @@ class estados(Enum):
     Tocantins = 26
     Distrito_Federal= 27
 
-class genero(Enum):
+class Genero(Enum):
     vazio = 0
     masculino = 1
     feminino = 2
@@ -92,10 +92,19 @@ class Clientes(db.Model):
                                 nullable=True, primary_key=False)
     genero = db.Column(db.Integer, unique=False,
                                 nullable=True, primary_key=False)
-    
+
+
+    def __init__(self, nome:str, email: str, solicit: str, estados: Estados, idade: Idade, setor: Setor, genero: Genero):
+            self.nome = nome
+            self.email = email
+            self.solicit = solicit
+            self.estados = estados.value
+            self.idade = idade.value
+            self.setor = setor.value
+            self.genero = genero.value
 
     def __repr__(self):
-        return "<Nome: {}>".format(self.nome)+ " <email: {}>".format(self.email)+ " <estados: {}>".format(estados(self.estados).name)+ " <idade: {}>".format(idade(self.idade).name)+ " <setor: {}>".format(setor(self.setor).name)+ " <genero: {}>".format(genero(self.genero).name)
+        return "<Nome: {}>".format(self.nome)+ " <email: {}>".format(self.email)+ " <estados: {}>".format(Estados(self.estados).name)+ " <idade: {}>".format(Idade(self.idade).name)+ " <setor: {}>".format(Setor(self.setor).name)+ " <genero: {}>".format(Genero(self.genero).name) + "\n <solicit: {}>".format(self.solicit)
 
 
 @dataclass
@@ -112,14 +121,17 @@ class Comentario(db.Model):
     # data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     data_criacao = db.Column(db.DateTime, default=datetime.now)
 
-    def __repr__(self):
-        return "<Comentario Autor: {}>".format(self.autor)
+    # def __init__(self, autor:str, texto: str):
+    #             self.autor = autor
+    #             self.texto = texto
 
+    def __repr__(self):
+        return "<Comentario Autor: {}>".format(self.autor) + " <texto: {}>".format(self.texto) + " <data: {}>".format(self.data_criacao)
+
+#MappedAsDataclass, dps init=false
 
 class Base_Tur(DeclarativeBase):
     pass
-
-
 class Comentario_Turso(Base_Tur):
     __tablename__ = "comentarios"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -128,7 +140,7 @@ class Comentario_Turso(Base_Tur):
     data_criacao: Mapped[datetime] = mapped_column(default=datetime.now)
 
     def __repr__(self) -> str:
-        return "<Comentario Autor: {}>".format(self.autor) + "\n<Comentario Texto: {}>".format(self.texto)
+        return "<Comentario Autor: {}>".format(self.autor) + "\n<Comentario Texto: {}>".format(self.texto) + "\n<data: {}>".format(self.data_criacao)
 
     def serializado(self):
         return {

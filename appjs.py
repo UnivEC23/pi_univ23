@@ -347,9 +347,9 @@ if __name__ == "__main__":
         if (sys.argv[1] == "sql"):
             tClientes = clientes_sql()
 
-    tClientes.criarTabela()
-    with app.app_context():
-        db.create_all()  # crias as tabelas
+    tClientes.criarTabela() # testar dps.
+    # with app.app_context():
+    #     db.create_all()  # crias as tabelas
 
     Base_Tur.metadata.create_all(engine)
     rodar()
