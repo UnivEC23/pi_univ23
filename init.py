@@ -58,8 +58,11 @@ db = SQLAlchemy(app)
 #     },
 # )
 
-# usa Turso local
-engine = create_engine("sqlite+libsql:///embedded.db")
+# usa SQLite local para desenvolvimento
+engine = create_engine(db_sql_lite)
+
+# MariaDB deve ser usado em produção
+# engine = create_engine(db_mariadb)
 
 
 # # Create a libSQL client for sync operations

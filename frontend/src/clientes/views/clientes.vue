@@ -3,7 +3,11 @@
 import botVoltar from '../components/botVoltar.vue';
 import listaClientes from '../components/listaClientes.vue';
 import listaComentarios from '../components/listaComentarios.vue';
+import dashboardClientes from '../components/dashboardClientes.vue';
+import dashboardVisitantes from '../components/dashboardVisitantes.vue';
+import { ref } from 'vue';
 
+const dashboardSelecionado = ref('clientes');
 
 </script>
 
@@ -12,8 +16,47 @@ import listaComentarios from '../components/listaComentarios.vue';
 		<section class="hero is-dark is-fullheight-with-navbar">
 			<div class="hero-body">
 				<div class="container">
-					<listaClientes />
-					<br>
+
+    <div class="buttons is-centered mb-5">
+        <button
+            class="button"
+            :class="{ 'is-info': dashboardSelecionado === 'lista' }"
+            @click="dashboardSelecionado = 'lista'"
+        >
+            👥 Lista de Clientes
+        </button>
+
+        <button
+            class="button"
+            :class="{ 'is-info': dashboardSelecionado === 'clientes' }"
+            @click="dashboardSelecionado = 'clientes'"
+        >
+            📊 Dashboard de Clientes
+        </button>
+
+        <button
+            class="button"
+            :class="{ 'is-info': dashboardSelecionado === 'visitantes' }"
+            @click="dashboardSelecionado = 'visitantes'"
+        >
+            👁 Dashboard de Visitantes
+        </button>
+    </div>
+
+    <div v-if="dashboardSelecionado === 'lista'">
+        <listaClientes />
+    </div>
+
+    <div v-if="dashboardSelecionado === 'clientes'">
+        <dashboardClientes />
+    </div>
+
+    <div v-if="dashboardSelecionado === 'visitantes'">
+        <dashboardVisitantes />
+    </div>
+
+    <br>
+   	
 					<listaComentarios />
 
 					<!-- botão adicionar clientes e comentários -->

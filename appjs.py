@@ -6,7 +6,7 @@ import os
 from interfaces import clientes_sql, clientes_sqla
 from init import app, db, engine
 # from init import client
-from modelos import Comentario
+from modelos import Comentario, Visitas_Turso
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -21,12 +21,45 @@ login_senha = "pass"
 # logado = False
 # debug
 logado = True
+# implementação anterior: contador acumulado
+# def incrementar_visitas():
+#     with Session(engine) as session:
+#         visita = session.scalar(select(Visitas_Turso).limit(1))
+#
+#         if visita is None:
+#             visita = Visitas_Turso(quantidade=1)
+#             session.add(visita)
+#         else:
+#             visita.quantidade += 1
+#
+#         session.commit()
 
 
-# ---------paginas ativas--------------------------
+# nova implementação: registra cada acesso com data e horário
+def registrar_visita():
+    with Session(engine) as session:
+        visita = Visitas_Turso()
+        session.add(visita)
+        session.commit()
+
+@app.route('/api/visitas', methods=['GET'])
+def api_visitas():
+    with Session(engine) as session:
+        visitas = session.scalars(
+            select(Visitas_Turso).order_by(Visitas_Turso.data_hora.desc())
+        ).all()
+
+        return jsonify([
+            {
+                "id": visita.id,
+                "data_hora": visita.data_hora.isoformat() if visita.data_hora else None
+            }
+            for visita in visitas
+        ])
 
 @app.route('/', methods=['GET'])
 def home():
+    registrar_visita()
     comentarios = pegar_comentarios_tur()
     # if request.method == 'GET':
     # return render_template('indexjs.html', comentarios=comentarios)

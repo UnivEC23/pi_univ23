@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from init import db, engine
 from datetime import datetime  # Importe o módulo datetime
 from enum import IntEnum, Enum
-
+    
 
 class Setor(Enum):
     vazio = 0
@@ -149,3 +149,13 @@ class Comentario_Turso(Base_Tur):
             'texto': self.texto,
             'data_criacao': self.data_criacao,
         }
+class Visitas_Turso(Base_Tur):
+    __tablename__ = "visitas"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+
+    # implementação anterior: contador acumulado 
+    quantidade: Mapped[int] = mapped_column(default=0)
+
+    # nova implementação: registra data e horário de cada acesso
+    data_hora: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
