@@ -39,6 +39,9 @@ logado = True
 def registrar_visita():
     with Session(engine) as session:
         visita = Visitas_Turso()
+        #verificação de erros:
+        #print("novo visitante: "+str(visita))
+        #print(visita)
         session.add(visita)
         session.commit()
 
@@ -48,6 +51,11 @@ def api_visitas():
         visitas = session.scalars(
             select(Visitas_Turso).order_by(Visitas_Turso.data_hora.desc())
         ).all()
+        #verificação de erros:
+        #print("\nvisitantes são:")
+        #for vis in visitas:
+        #    print(vis)
+        #print()
 
         return jsonify([
             {
@@ -158,7 +166,7 @@ def clientesPost():
     setor = request.json["setor"]
     genero = request.json["genero"]
 
-    print("\n\napi/clientes", nome, email, solicit, estados, idade, setor, genero)
+    #print("\n\napi/clientes", nome, email, solicit, estados, idade, setor, genero)
 
     return tClientes.adicionar(nome, email, solicit, estados, idade, setor, genero)
 
@@ -178,9 +186,9 @@ def pegar_comentarios_tur():
             operação = select(Comentario_Turso)
             comentários = session. scalars(select(Comentario_Turso)).all()
 
-            print("\n\nOs comentários são:")
-            for item in session.scalars(operação):
-                print(item)
+            #print("\n\nOs comentários são:")
+            #for item in session.scalars(operação):
+            #    print(item)
             # print("\n\n")
 
             return comentários

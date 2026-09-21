@@ -156,9 +156,9 @@ class clientes_sqla(iClientes):
     def pegarTodos(self):
         try:
             clientes = Clientes.query.all()
-            print("\npegar todos")
-            print(clientes)
-            print("josnify" , jsonify(clientes).get_data(as_text=True))
+            #print("\npegar todos")
+            #print(clientes)
+            #print("josnify" , jsonify(clientes).get_data(as_text=True))
 
             return jsonify(clientes), 200
         except Exception as e:

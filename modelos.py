@@ -158,4 +158,9 @@ class Visitas_Turso(Base_Tur):
     quantidade: Mapped[int] = mapped_column(default=0)
 
     # nova implementação: registra data e horário de cada acesso
-    data_hora: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    data_hora: Mapped[datetime] = mapped_column(default=datetime.now)
+
+
+    def __repr__(self) -> str:
+            #return "<quantidade: {}>".format(self.quantidade) + "\n<data_hora: {}>".format(self.data_hora)
+            return "<data_hora: {}>".format(self.data_hora)

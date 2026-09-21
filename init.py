@@ -21,6 +21,8 @@ TURSO_DATABASE_URL = os.environ.get("TURSO_DATABASE_URL")
 TURSO_AUTH_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
 # print(TURSO_DATABASE_URL)
 
+
+#==============//banco de dados clientes//===================
 # if __name__ == "__main__":
 project_dir = os.path.dirname(os.path.abspath(__file__))
 db_sql_lite = "sqlite:///{}".format(os.path.join(project_dir, "db_dev.db"))
@@ -47,7 +49,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = db_atual
 # global db
 db = SQLAlchemy(app)
 
-# usa Turso na web
+
+#====================//=========================
+
+
+#=============//banco de dados Turso//===================
+# usa Turso na web(production)
 # engine = create_engine(
 #     "sqlite+libsql:///embedded.db",
 #     # f"sqlite+{TURSO_DATABASE_URL}?secure=true",
@@ -58,12 +65,10 @@ db = SQLAlchemy(app)
 #     },
 # )
 
-# usa SQLite local para desenvolvimento
-engine = create_engine(db_sql_lite)
+# usa Turso local(dev)
+engine = create_engine("sqlite+libsql:///embedded.db")
 
-# MariaDB deve ser usado em produção
-# engine = create_engine(db_mariadb)
-
+#=========================//=============================
 
 # # Create a libSQL client for sync operations
 # client = libsql.connect(
