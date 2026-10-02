@@ -4,7 +4,8 @@ todo->sql alchemy, criar e org objetos arrumar front, render_template?
 pip freeze > requirements.txt
 
 
-#instruções para manuziar a DB por código:
+#IMPORTANTE
+#instruções para manuziar a DB de clientes por código:
 #ver dados na db
 python clientes_db.py ver
 #adicionar a lista de clientes
