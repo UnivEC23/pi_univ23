@@ -43,8 +43,19 @@ def _percentual(valores: list[int], valor_alvo: int) -> float:
 def _matriz_features(clientes: list[Clientes]) -> np.ndarray:
     """One-hot dos atributos categóricos (Enums são ordinais arbitrários;
     sem one-hot, o k-means calcularia distâncias sem sentido)."""
-    X = np.array([[c.estados.value, c.idade.value,
-                   c.setor.value, c.genero.value] for c in clientes], dtype=int)
+        # ============================================================
+    # CÓDIGO ANTERIOR — PRESERVADO
+    # ============================================================
+    # X = np.array([[c.estados.value, c.idade.value,
+    #                c.setor.value, c.genero.value]
+    #               for c in clientes])
+
+    # ============================================================
+    # VERSÃO ATUAL — Clientes armazena os Enums como inteiros
+    # ============================================================
+    X = np.array([[c.estados, c.idade,
+                   c.setor, c.genero]
+                  for c in clientes])
     return OneHotEncoder(sparse_output=False).fit_transform(X)
 
 def segmentar(clientes: list[Clientes],
@@ -84,16 +95,23 @@ def perfil_brasil(grupos: dict[int, list[Clientes]]) -> list[Clientes]:
     total = sum(len(g) for g in grupos.values())
     perfis = []
     for i, (_, grupo) in enumerate(grupos.items(), start=1):
-        estados_ = [c.estados.value for c in grupo]
-        idades = [c.idade.value for c in grupo]
-        setores = [c.setor.value for c in grupo]
-        generos = [c.genero.value for c in grupo]
+        # CÓDIGO ANTERIOR — PRESERVADO
+# estados_ = [c.estados.value for c in grupo]
+# idades = [c.idade.value for c in grupo]
+# setores = [c.setor.value for c in grupo]
+# generos = [c.genero.value for c in grupo]
+
+    # VERSÃO ATUAL
+        estados_ = [c.estados for c in grupo]
+        idades = [c.idade for c in grupo]
+        setores = [c.setor for c in grupo]
+        generos = [c.genero for c in grupo]
 
         uf_moda = _modo(estados_, Estados)
         idade_moda = _modo(idades, Idade)
         setor_moda = _modo(setores, Setor)
         genero_moda = _modo(generos, Genero)
-
+    
         perfis.append(Clientes(
             f"Perfil {i} — Brasil",
             "perfil@interno",
@@ -122,49 +140,15 @@ def perfil_por_estado(clientes: list[Clientes],
     if len(grupo) < MIN_AMOSTRA_ESTADO:
         return None
 
-    idades = [c.idade.value for c in grupo]
-    setores = [c.setor.value for c in grupo]
-    generos = [c.genero.value for c in grupo]
+            # CÓDIGO ANTERIOR — PRESERVADO
+        # idades = [c.idade.value for c in grupo]
+        # setores = [c.setor.value for c in grupo]
+        # generos = [c.genero.value for c in grupo]
 
-    idade_moda = _modo(idades, Idade)
-    setor_moda = _modo(setores, Setor)
-    genero_moda = _modo(generos, Genero)
-
-    return Clientes(
-        f"Perfil — {uf.name}",
-        "perfil@interno",
-        (f"{len(grupo)} cliente(s) em {uf.name}. "
-         f"Dominante: faixa {idade_moda.name} "
-         f"({_percentual(idades, idade_moda.value):.0f}%), "
-         f"setor {setor_moda.name} "
-         f"({_percentual(setores, setor_moda.value):.0f}%), "
-         f"gênero {genero_moda.name} "
-         f"({_percentual(generos, genero_moda.value):.0f}%)."),
-        uf,
-        idade_moda,
-        setor_moda,
-        genero_moda,
-    )
-
-def perfis_estados_disponiveis(clientes: list[Clientes]) -> list[Clientes]:
-    """Perfis de todos os estados com amostra suficiente."""
-    perfis = []
-    for uf in Estados:
-        p = perfil_por_estado(clientes, uf)
-        if p is not None:
-            perfis.append(p)
-    return perfis
-
-def perfis_por_regiao(clientes: list[Clientes]) -> list[Clientes]:
-    """Perfis por macrorregião (amostras maiores, mais confiáveis)."""
-    perfis = []
-    for nome_regiao, ufs in REGIOES.items():
-        grupo = [c for c in clientes if c.estados in ufs]
-        if not grupo:
-            continue
-        idades = [c.idade.value for c in grupo]
-        setores = [c.setor.value for c in grupo]
-        generos = [c.genero.value for c in grupo]
+        # VERSÃO ATUAL
+        idades = [c.idade for c in grupo]
+        setores = [c.setor for c in grupo]
+        generos = [c.genero for c in grupo]
 
         idade_moda = _modo(idades, Idade)
         setor_moda = _modo(setores, Setor)
@@ -180,26 +164,125 @@ def perfis_por_regiao(clientes: list[Clientes]) -> list[Clientes]:
              f"({_percentual(setores, setor_moda.value):.0f}%), gênero "
              f"{genero_moda.name} "
              f"({_percentual(generos, genero_moda.value):.0f}%)."),
-            _modo([c.estados.value for c in grupo], Estados),
+            # CÓDIGO ANTERIOR — PRESERVADO
+            # _modo([c.estados.value for c in grupo], Estados),
+
+            # VERSÃO ATUAL
+            _modo([c.estados for c in grupo], Estados),
             idade_moda,
             setor_moda,
             genero_moda,
         ))
+
+# CÓDIGO ANTERIOR — PRESERVADO
+# idades = [c.idade.value for c in grupo]
+# setores = [c.setor.value for c in grupo]
+# generos = [c.genero.value for c in grupo]
+
+# VERSÃO ATUAL
+    idades = [c.idade for c in grupo]
+    setores = [c.setor for c in grupo]
+    generos = [c.genero for c in grupo]
+
+    idade_moda = _modo(idades, Idade)
+    setor_moda = _modo(setores, Setor)
+    genero_moda = _modo(generos, Genero)
+
+def perfis_estados_disponiveis(clientes: list[Clientes]) -> list[Clientes]:
+    """Perfis de todos os estados com amostra suficiente."""
+    perfis = []
+
+    for uf in Estados:
+        p = perfil_por_estado(clientes, uf)
+        if p is not None:
+            perfis.append(p)
+
+    return perfis
+
+def perfis_por_regiao(clientes: list[Clientes]) -> list[Clientes]:
+    """Perfis por macrorregião (amostras maiores, mais confiáveis)."""
+    perfis = []
+
+    for nome_regiao, ufs in REGIOES.items():
+        grupo = [c for c in clientes if c.estados in ufs]
+        if not grupo:
+            continue
+
+        # CÓDIGO ANTERIOR — PRESERVADO
+        # idades = [c.idade.value for c in grupo]
+        # setores = [c.setor.value for c in grupo]
+        # generos = [c.genero.value for c in grupo]
+
+        # VERSÃO ATUAL
+        idades = [c.idade for c in grupo]
+        setores = [c.setor for c in grupo]
+        generos = [c.genero for c in grupo]
+
+        idade_moda = _modo(idades, Idade)
+        setor_moda = _modo(setores, Setor)
+        genero_moda = _modo(generos, Genero)
+
+        perfis.append(Clientes(
+            f"Perfil — Região {nome_regiao}",
+            "perfil@interno",
+            (f"{len(grupo)} cliente(s). Dominante: faixa "
+             f"{idade_moda.name} "
+             f"({_percentual(idades, idade_moda.value):.0f}%), setor "
+             f"{setor_moda.name} "
+             f"({_percentual(setores, setor_moda.value):.0f}%), gênero "
+             f"{genero_moda.name} "
+             f"({_percentual(generos, genero_moda.value):.0f}%)."),
+            # CÓDIGO ANTERIOR — PRESERVADO
+            # _modo([c.estados.value for c in grupo], Estados),
+
+            # VERSÃO ATUAL
+            _modo([c.estados for c in grupo], Estados),
+            idade_moda,
+            setor_moda,
+            genero_moda,
+        ))
+
+    return perfis
     return perfis
 
 if __name__ == "__main__":
-    from modelos import clientes_1_30
 
-    grupos, k = segmentar(clientes_1_30)
+    # ============================================================
+    # CÓDIGO ANTERIOR — PRESERVADO, NÃO APAGAR
+    # ============================================================
+    # from modelos import clientes_1_30
+    #
+    # grupos, k = segmentar(clientes_1_30)
+    #
+    # print(f"\n=== PERFIS — BRASIL ({k} segmentos, k escolhido por silhouette) ===")
+    # for p in perfil_brasil(grupos):
+    #     print(f"{p.nome}: {p.solicit}")
+    #
+    # print(f"\n=== PERFIS — POR ESTADO (apenas UFs com >= {MIN_AMOSTRA_ESTADO} clientes) ===")
+    # for p in perfis_estados_disponiveis(clientes_1_30):
+    #     print(f"{p.nome}: {p.solicit}")
+    #
+    # print("\n=== PERFIS — POR REGIÃO ===")
+    # for p in perfis_por_regiao(clientes_1_30):
+    #     print(f"{p.nome}: {p.solicit}")
+
+    # ============================================================
+    # VERSÃO ATUAL — USA A BASE COMPLETA
+    # ============================================================
+    from clientes_db import lista_clientes
+
+    clientes = lista_clientes()
+
+    grupos, k = segmentar(clientes)
 
     print(f"\n=== PERFIS — BRASIL ({k} segmentos, k escolhido por silhouette) ===")
     for p in perfil_brasil(grupos):
         print(f"{p.nome}: {p.solicit}")
 
     print(f"\n=== PERFIS — POR ESTADO (apenas UFs com >= {MIN_AMOSTRA_ESTADO} clientes) ===")
-    for p in perfis_estados_disponiveis(clientes_1_30):
+    for p in perfis_estados_disponiveis(clientes):
         print(f"{p.nome}: {p.solicit}")
 
     print("\n=== PERFIS — POR REGIÃO ===")
-    for p in perfis_por_regiao(clientes_1_30):
+    for p in perfis_por_regiao(clientes):
         print(f"{p.nome}: {p.solicit}")

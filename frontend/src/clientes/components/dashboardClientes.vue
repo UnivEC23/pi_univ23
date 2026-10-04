@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import {
   Chart,
   BarController,
@@ -36,6 +36,75 @@ const graficoSetor = ref<HTMLCanvasElement | null>(null)
 const graficoIdade = ref<HTMLCanvasElement | null>(null)
 
 const clientes = ref<any[]>([])
+
+const estadoSelecionado = ref<number | 'brasil'>('brasil')
+
+const estadosDisponiveis = [
+  { codigo: 'brasil', nome: 'Brasil' },
+  ...Array.from({ length: 27 }, (_, indice) => ({
+    codigo: indice + 1,
+    nome: estados_str(indice + 1)
+  }))
+]
+
+const clientesExpostos = computed(() => {
+  if (estadoSelecionado.value === 'brasil') {
+    return clientes.value
+  }
+
+  return clientes.value.filter(
+    cliente => Number(cliente.estados) === estadoSelecionado.value
+  )
+})
+
+/* =========================
+   CLIENTE PADRÃO
+========================= */
+
+const clientePadrao = computed(() => {
+  const dados = clientesExpostos.value
+
+  if (!dados.length) {
+    return null
+  }
+
+ const maisFrequente = (valores: number[]) => {
+  const contagem: Record<number, number> = {}
+
+  valores.forEach(valor => {
+    contagem[valor] = (contagem[valor] || 0) + 1
+  })
+
+  // NOVA VERSÃO:
+  const chaves = Object.keys(contagem)
+  let codigoMaisFrequente = Number(chaves[0] ?? 0)
+
+  for (const chave of chaves) {
+    const quantidadeAtual = contagem[Number(chave)] ?? 0
+    const quantidadeMaior = contagem[codigoMaisFrequente] ?? 0
+
+    if (quantidadeAtual > quantidadeMaior) {
+      codigoMaisFrequente = Number(chave)
+    }
+  }
+
+  return codigoMaisFrequente
+}
+
+return {
+  genero: maisFrequente(dados.map(cliente => Number(cliente.genero))),
+  setor: maisFrequente(dados.map(cliente => Number(cliente.setor))),
+  idade: maisFrequente(dados.map(cliente => Number(cliente.idade))),
+
+  // VERSÃO ANTERIOR:
+  // estado: maisFrequente(dados.map(cliente => Number(cliente.estados)))
+
+  // NOVA VERSÃO:
+  estado: estadoSelecionado.value === 'brasil'
+    ? 0
+    : estadoSelecionado.value
+}
+})
 
 const filtroAtivo = ref('')
 const clientesFiltrados = ref<any[]>([])
@@ -77,17 +146,24 @@ function criarGraficoGenero() {
 
   const categorias = [1, 2, 3]
 
-  const categoriasAtivas = categorias.filter(codigo =>
-    clientes.value.some(
-      cliente => Number(cliente.genero) === codigo
-    )
+// VERSÃO ANTERIOR:
+// const categoriasAtivas = categorias.filter(codigo =>
+//   clientes.value.some(
+//     cliente => Number(cliente.genero) === codigo
+//   )
+// )
+
+const categoriasAtivas = categorias.filter(codigo =>
+  clientesExpostos.value.some(
+    cliente => Number(cliente.genero) === codigo
   )
+)
 
   const dados = categoriasAtivas.map(codigo =>
-    clientes.value.filter(
-      cliente => Number(cliente.genero) === codigo
-    ).length
-  )
+  clientesExpostos.value.filter(
+    cliente => Number(cliente.genero) === codigo
+  ).length
+)
 
   const labels = categoriasAtivas.map(codigo =>
     genero_str(codigo as any)
@@ -173,11 +249,18 @@ function criarGraficoSetor() {
 
   const categorias = [1, 2, 3, 4]
 
-  const dados = categorias.map(codigo =>
-    clientes.value.filter(
-      cliente => Number(cliente.setor) === codigo
-    ).length
-  )
+// VERSÃO ANTERIOR:
+// const dados = categorias.map(codigo =>
+//   clientes.value.filter(
+//     cliente => Number(cliente.setor) === codigo
+//   ).length
+// )
+
+const dados = categorias.map(codigo =>
+  clientesExpostos.value.filter(
+    cliente => Number(cliente.setor) === codigo
+  ).length
+)
 
   const labels = categorias.map(codigo =>
     setor_str(codigo as any)
@@ -259,11 +342,18 @@ function criarGraficoIdade() {
 
   const categorias = [1, 2, 3, 4]
 
-  const dados = categorias.map(codigo =>
-    clientes.value.filter(
-      cliente => Number(cliente.idade) === codigo
-    ).length
-  )
+// VERSÃO ANTERIOR:
+// const dados = categorias.map(codigo =>
+//   clientes.value.filter(
+//     cliente => Number(cliente.idade) === codigo
+//   ).length
+// )
+
+const dados = categorias.map(codigo =>
+  clientesExpostos.value.filter(
+    cliente => Number(cliente.idade) === codigo
+  ).length
+)
 
   const labels = categorias.map(codigo =>
     idade_str(codigo as any)
@@ -335,6 +425,20 @@ if (codigo === undefined) return
   })
 }
 
+/* =========================
+   ATUALIZAÇÃO DOS GRÁFICOS
+========================= */
+
+function atualizarGraficos() {
+  criarGraficoGenero()
+  criarGraficoSetor()
+  criarGraficoIdade()
+}
+
+watch(estadoSelecionado, () => {
+  atualizarGraficos()
+})
+
 
 /* =========================
    FILTRO
@@ -348,24 +452,44 @@ function aplicarFiltro(
   filtroAtivo.value = `${tipo}: ${nome}`
 
   if (tipo === 'Gênero') {
-    clientesFiltrados.value = clientes.value.filter(
+
+    // VERSÃO ANTERIOR:
+    // clientesFiltrados.value = clientes.value.filter(
+    //   cliente => Number(cliente.genero) === codigo
+    // )
+
+    // NOVA VERSÃO:
+    clientesFiltrados.value = clientesExpostos.value.filter(
       cliente => Number(cliente.genero) === codigo
     )
   }
 
   if (tipo === 'Setor') {
-    clientesFiltrados.value = clientes.value.filter(
+
+    // VERSÃO ANTERIOR:
+    // clientesFiltrados.value = clientes.value.filter(
+    //   cliente => Number(cliente.setor) === codigo
+    // )
+
+    // NOVA VERSÃO:
+    clientesFiltrados.value = clientesExpostos.value.filter(
       cliente => Number(cliente.setor) === codigo
     )
   }
 
-  if (tipo === 'Faixa etária') {
-    clientesFiltrados.value = clientes.value.filter(
+  if (tipo === 'Idade') {
+
+    // VERSÃO ANTERIOR:
+    // clientesFiltrados.value = clientes.value.filter(
+    //   cliente => Number(cliente.idade) === codigo
+    // )
+
+    // NOVA VERSÃO:
+    clientesFiltrados.value = clientesExpostos.value.filter(
       cliente => Number(cliente.idade) === codigo
     )
   }
 }
-
 
 /* =========================
    LIMPAR FILTRO
@@ -405,6 +529,23 @@ function contarEstados() {
         Visualização dos dados
       </h2>
 
+      <!-- FILTRO POR ESTADO -->
+<div class="campo-estado">
+  <label class="label">Estado</label>
+
+  <div class="select">
+    <select v-model="estadoSelecionado">
+      <option
+        v-for="estado in estadosDisponiveis"
+        :key="estado.codigo"
+        :value="estado.codigo"
+      >
+        {{ estado.nome }}
+      </option>
+    </select>
+  </div>
+</div>
+
       <button
         v-if="filtroAtivo"
         class="button is-light"
@@ -415,6 +556,37 @@ function contarEstados() {
 
     </div>
 
+    <!-- CLIENTE PADRÃO -->
+    <div v-if="clientePadrao" class="box cliente-padrao">
+      <h3 class="title is-5">
+        Cliente padrão
+      </h3>
+
+      <p>
+        <strong>Gênero:</strong>
+        {{ clientePadrao.genero === 1 ? 'Masculino' :
+           clientePadrao.genero === 2 ? 'Feminino' : 'Outro' }}
+      </p>
+
+      <p>
+        <strong>Setor:</strong>
+        {{ clientePadrao.setor === 1 ? 'Comércio' :
+           clientePadrao.setor === 2 ? 'Serviços' :
+           clientePadrao.setor === 3 ? 'Indústria' : 'Outros' }}
+      </p>
+
+      <p>
+        <strong>Faixa etária:</strong>
+        {{ clientePadrao.idade === 1 ? 'Até 20' :
+           clientePadrao.idade === 2 ? '21–39' :
+           clientePadrao.idade === 3 ? '40–59' : '60+' }}
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        {{ estados_str(clientePadrao.estado) }}
+      </p>
+    </div>
 
     <!-- GRÁFICOS -->
 
@@ -632,6 +804,10 @@ function contarEstados() {
 .cabecalho-dashboard .title {
   color: white;
   margin-bottom: 0;
+}
+
+.cliente-padrao .title {
+  color: #363636;
 }
 
 .grafico-box {
