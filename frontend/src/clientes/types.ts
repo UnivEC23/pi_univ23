@@ -130,9 +130,9 @@ export function genero_str(value: genero): string {
         case genero.vazio:
             return "Vazio";
         case genero.masculino:
-            return "Masculíno";
+            return "Masculino";
         case genero.feminino:
-            return "Feminíno";
+            return "Feminino";
         case genero.outro:
             return "Outro";
         default:
@@ -155,9 +155,9 @@ export function idade_str(valor: idade): string {
         case idade._0:
             return "Até 20";
         case idade._20:
-            return "20+";
+            return "21–39";
         case idade._40:
-            return "40+";
+            return "40–59";
         case idade._60:
             return "60+";
         default:

@@ -6,7 +6,7 @@ import os
 from interfaces import clientes_sql, clientes_sqla
 from init import app, db, engine
 # from init import client
-from modelos import Comentario
+from modelos import Comentario, Visitas_Turso
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -21,12 +21,53 @@ login_senha = "pass"
 # logado = False
 # debug
 logado = True
+# implementação anterior: contador acumulado
+# def incrementar_visitas():
+#     with Session(engine) as session:
+#         visita = session.scalar(select(Visitas_Turso).limit(1))
+#
+#         if visita is None:
+#             visita = Visitas_Turso(quantidade=1)
+#             session.add(visita)
+#         else:
+#             visita.quantidade += 1
+#
+#         session.commit()
 
 
-# ---------paginas ativas--------------------------
+# nova implementação: registra cada acesso com data e horário
+def registrar_visita():
+    with Session(engine) as session:
+        visita = Visitas_Turso()
+        #verificação de erros:
+        #print("novo visitante: "+str(visita))
+        #print(visita)
+        session.add(visita)
+        session.commit()
+
+@app.route('/api/visitas', methods=['GET'])
+def api_visitas():
+    with Session(engine) as session:
+        visitas = session.scalars(
+            select(Visitas_Turso).order_by(Visitas_Turso.data_hora.desc())
+        ).all()
+        #verificação de erros:
+        #print("\nvisitantes são:")
+        #for vis in visitas:
+        #    print(vis)
+        #print()
+
+        return jsonify([
+            {
+                "id": visita.id,
+                "data_hora": visita.data_hora.isoformat() if visita.data_hora else None
+            }
+            for visita in visitas
+        ])
 
 @app.route('/', methods=['GET'])
 def home():
+    registrar_visita()
     comentarios = pegar_comentarios_tur()
     # if request.method == 'GET':
     # return render_template('indexjs.html', comentarios=comentarios)
@@ -125,7 +166,7 @@ def clientesPost():
     setor = request.json["setor"]
     genero = request.json["genero"]
 
-    print("\n\napi/clientes", nome, email, solicit, estados, idade, setor, genero)
+    #print("\n\napi/clientes", nome, email, solicit, estados, idade, setor, genero)
 
     return tClientes.adicionar(nome, email, solicit, estados, idade, setor, genero)
 
@@ -145,9 +186,9 @@ def pegar_comentarios_tur():
             operação = select(Comentario_Turso)
             comentários = session. scalars(select(Comentario_Turso)).all()
 
-            print("\n\nOs comentários são:")
-            for item in session.scalars(operação):
-                print(item)
+            #print("\n\nOs comentários são:")
+            #for item in session.scalars(operação):
+            #    print(item)
             # print("\n\n")
 
             return comentários

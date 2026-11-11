@@ -308,16 +308,39 @@ async function removerCliente(_nome: string) {
 
 <style scoped>
 button.removcli,
-button.removcli>span {
+button.removcli > span {
 	font-size: small;
-	/* width: 2em; */
 }
 
-/* :deep(.o-table td:nth-child(3)) {
-	text-align: center;
+/* Tabela de clientes */
+:deep(.o-table) {
+	background-color: transparent !important;
+	color: white !important;
 }
 
-:deep(.o-table th:nth-child(3)) {
-	text-align: center;
-} */
+:deep(.o-table table) {
+	background-color: transparent !important;
+	color: white !important;
+}
+
+:deep(.o-table th),
+:deep(.o-table td) {
+	background-color: transparent !important;
+	color: white !important;
+	border-color: #555 !important;
+}
+
+:deep(.o-table th) {
+	color: #48bfff !important;
+	font-weight: bold;
+}
+
+:deep(.o-table td) {
+	color: white !important;
+}
+
+:deep(.o-table tbody tr:hover td) {
+	background-color: #363b46 !important;
+	color: white !important;
+}
 </style>
